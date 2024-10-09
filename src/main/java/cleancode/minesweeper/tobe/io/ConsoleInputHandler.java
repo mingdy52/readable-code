@@ -12,7 +12,7 @@ public class ConsoleInputHandler implements InputHandler {
     public CellPosition getCellPositionFromUser() {
         String userInput = SCANNER.nextLine();
 
-        int rowIndex = boardIndexConverter.getSelectedColIndex(userInput);
+        int rowIndex = boardIndexConverter.getSelectedRowIndex(userInput);
         int colIndex = boardIndexConverter.getSelectedColIndex(userInput);
         return CellPosition.of(rowIndex, colIndex);
     }

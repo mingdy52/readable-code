@@ -34,11 +34,16 @@ public class CellSnapshot {
         return new CellSnapshot(CellSnapshotStatus.UNCHECKED, 0);
     }
 
+    public boolean isSameStatus(CellSnapshotStatus cellSnapshotStatus) {
+        return this.status == cellSnapshotStatus;
+    }
+
     public CellSnapshotStatus getStatus() {
         return status;
     }
 
-    public int getNearbyLandMineCount() {
-        return nearbyLandMineCount;
+    public String getNearbyLandMineCount() {
+        return String.valueOf(nearbyLandMineCount);
     }
+
 }

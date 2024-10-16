@@ -6,6 +6,8 @@ import cleancode.minesweeper.tobe.minesweeper.board.position.CellPositions;
 import cleancode.minesweeper.tobe.minesweeper.board.position.RelativePosition;
 import cleancode.minesweeper.tobe.minesweeper.gamelevel.GameLevel;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Stack;
 
@@ -81,9 +83,11 @@ public class GameBoard {
         Cell cell = findCell(cellPosition);
         return cell.getCellSnapshot();
     }
+
     public int getRowSize() {
         return board.length;
     }
+
     public int getColSize() {
         return board[0].length;
     }
@@ -92,21 +96,24 @@ public class GameBoard {
     private void initializeGameStatus() {
         gameStatus = GameStatus.IN_PROGRESS;
     }
+
     private void initializeEmptyCells(CellPositions cellPositions) {
         List<CellPosition> allPositions = cellPositions.getPositions();
         for (CellPosition position : allPositions) {
             updateCellAt(position, new EmptyCell());
         }
     }
+
     private void initializeLandMineCells(List<CellPosition> landMinePositions) {
         for (CellPosition landMinePosition : landMinePositions) {
             updateCellAt(landMinePosition, new LandMineCell());
         }
     }
+
     private void initializeNumberCells(List<CellPosition> numberPositionCandidates) {
         for (CellPosition candidatePosition : numberPositionCandidates) {
             int count = countNearByLandMines(candidatePosition);
-            if(count != 0) {
+            if (count != 0) {
                 updateCellAt(candidatePosition, new NumberCell(count));
             }
         }
@@ -167,18 +174,19 @@ public class GameBoard {
         */
 
     }
+
     private void openSurroundedCells2(CellPosition cellPosition) {
-        Stack<CellPosition> stack = new Stack<>();
-        stack.push(cellPosition);
-        
-        while(!stack.isEmpty()) {
-            openAandPushCellAt(stack);
+        Deque<CellPosition> deque = new ArrayDeque<>();
+        deque.push(cellPosition);
+
+        while (!deque.isEmpty()) {
+            openAandPushCellAt(deque);
         }
 
     }
 
-    private void openAandPushCellAt(Stack<CellPosition> stack) {
-        CellPosition currentCellPosition = stack.pop();
+    private void openAandPushCellAt(Deque<CellPosition> deque) {
+        CellPosition currentCellPosition = deque.pop();
 
         if (isOpenedCell(currentCellPosition)) {
             return;
@@ -195,7 +203,7 @@ public class GameBoard {
 
         List<CellPosition> surroundedPositions = calculateSurroundedPositions(currentCellPosition, getRowSize(), getColSize());
         for (CellPosition surroundedPosition : surroundedPositions) {
-            stack.push(surroundedPosition);
+            deque.push(surroundedPosition);
         }
     }
 
@@ -206,10 +214,12 @@ public class GameBoard {
     private boolean isOpenedCell(CellPosition cellPosition) {
         return findCell(cellPosition).isOpened();
     }
+
     private boolean isLandMineCellAt(CellPosition cellPosition) {
         Cell cell = findCell(cellPosition);
         return cell.isLandMine();
     }
+
     private boolean doesCellHaveLandMineCount(CellPosition cellPosition) {
         return findCell(cellPosition).hasLandMineCount();
     }
@@ -219,6 +229,7 @@ public class GameBoard {
             changeGameStatusToWin();
         }
     }
+
     private boolean isAllCellChecked() {
         Cells cells = Cells.from(board);
         return cells.isAllCellChecked();
@@ -227,6 +238,7 @@ public class GameBoard {
     private void changeGameStatusToWin() {
         gameStatus = GameStatus.WIN;
     }
+
     private void changeGameStatusToLose() {
         gameStatus = GameStatus.LOSE;
     }
